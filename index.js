@@ -48,7 +48,9 @@ class Person {
   }
   eat(someFood) {
     if (this.stomach.length < 10) this.stomach.push(someFood);
-    else if (this.stomach.length >= 10) this.stomach = [];
+    else {
+      console.log("I'm too full!");
+    }
   }
 
   poop() {
@@ -99,21 +101,26 @@ class Car {
     this.tank = this.tank + gallons;
   }
 
-  drive(distance) {
-    if (distance / this.milesPerGallon > this.tank) {
-      this.odometer += this.tank * this.milesPerGallon;
-      this.tank = 0;
-      return `I ran out of fuel at ${this.odometer} miles`;
+  drive(milesDriven) {
+    if (this.tank - milesDriven / this.milesPerGallon <= 0)
+      for (let i = milesDriven; i > 0; i--) {
+        if (this.tank - i / this.milesPerGallon === 0) {
+          this.tank = 0;
+          this.odometer += i;
+          return `I ran out of fuel at ${this.odometer} miles.`;
+        }
+      }
+    else {
+      this.tank -= milesDriven / this.milesPerGallon;
+      this.odometer += milesDriven;
     }
-    this.odometer += distance;
-    this.tank -= distance / this.milesPerGallon;
   }
 }
 
-let newCarType = new Car("ford", 100);
-console.log(newCarType);
-newCarType.fill(5);
-newCarType.drive(120);
+// let newCarType = new Car("ford", 100);
+// console.log(newCarType);
+// newCarType.fill(5);
+// newCarType.drive(120);
 
 /*
   TASK 3
@@ -163,8 +170,8 @@ class Instructor extends Lambdasian {
   demo(subject) {
     return `Today we are learning ${subject}`;
   }
-  grade(name, subject) {
-    return `${name} receives a perfect score on ${subject}`;
+  grade(student, subject) {
+    return `${student.name} receives a perfect score on ${subject}`;
   }
 }
 
@@ -202,32 +209,40 @@ class Student extends Lambdasian {
     this.previousBackground = studentAttrs.previousBackground;
     this.className = studentAttrs.className;
     this.favSubjects = studentAttrs.favSubjects;
+    this.grade = Math.floor(Math.random() * 100) + 1;
   }
-  listSubjects(studentSubject) {
-    return `Loving ${studentSubject}`;
+  listSubjects() {
+    return `Loving${this.favSubjects.join(", ")}`;
   }
-  PRAassignment(subject) {
-    return `${Student.name} has submitted a ${subject}`;
+  PRAssignment(subject) {
+    return `${this.name} has submitted a PR for ${subject}`;
   }
   sprintChallenge(subject) {
-    `${Student.name} has begun sprint challenge on ${subject}`;
+    return `${this.name} has begun sprint challenge on ${subject}`;
+  }
+  graduate() {
+    if (this.grade > 70) {
+      return `${this.name} has a grade of ${this.grade}%, and is ready to graduate from Lambda!!!`;
+    } else {
+      return `${this.name} has a grade of ${this.grade}% and needs to work harder!!!`;
+    }
   }
 }
 
-const newStudent = new Student({
-  name: "jackie",
-  age: 20,
-  location: "Boston",
-  specialty: "Math",
-  favLanguage: "French",
-  catchPhrase: "It's whatever, I don't care",
-  previousBackground: "History",
-  className: "web21",
-  favSubjects: ["Css", "HTML"],
-});
+// const newStudent = new Student({
+//   name: "jackie",
+//   age: 20,
+//   location: "Boston",
+//   specialty: "Math",
+//   favLanguage: "French",
+//   catchPhrase: "It's whatever, I don't care",
+//   previousBackground: "History",
+//   className: "web21",
+//   favSubjects: ["Css", "HTML"],
+// });
 
-console.log(newStudent);
-console.log(newStudent.listSubjects("Math"));
+// console.log(newStudent);
+// console.log(newStudent.listSubjects("Math"));
 /*
   TASK 6
     - Write a ProjectManager class extending Instructor.
@@ -247,26 +262,26 @@ class ProjectManager extends Instructor {
     this.gradClassName = pjAttrs.gradClassName;
     this.favInstructor = pjAttrs.favInstructor;
   }
-  standUp(name, channel) {
-    return `${name} announces to ${channel}, @channel standy times!`;
+  standUp(slackChannel) {
+    return `${this.name} announces to ${slackChannel}, @${slackChannel} standy times!`;
   }
-  debugsCode(name, subject, student) {
-    return `${name} debugs ${student}'s code on ${subject}`;
+  debugsCode(student, subject) {
+    return `${this.name} debugs ${student.name}'s code on ${subject}`;
   }
 }
 
-let newPJ = new ProjectManager({
-  name: "Ronnie",
-  age: 32,
-  location: "California",
-  specialty: "Computer Science",
-  gradClassName: "CS2",
-  favInstructor: "Dan Frehner",
-  favLanguage: "Spanish",
-});
+// let newPJ = new ProjectManager({
+//   name: "Ronnie",
+//   age: 32,
+//   location: "California",
+//   specialty: "Computer Science",
+//   gradClassName: "CS2",
+//   favInstructor: "Dan Frehner",
+//   favLanguage: "Spanish",
+// });
 
-console.log(newPJ);
-console.log(newPJ.standUp("Kathleen", "web21"));
+// console.log(newPJ);
+// console.log(newPJ.standUp("Kathleen", "web21"));
 
 /*
   STRETCH PROBLEM (no tests!)
